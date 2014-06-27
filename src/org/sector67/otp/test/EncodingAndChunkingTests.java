@@ -43,12 +43,12 @@ public class EncodingAndChunkingTests extends TestCase {
 	public void testChunkingOne() {
 		byte[] test = { (byte)0xaa, (byte)0xbb, (byte)0xcc, (byte)0xdd, (byte)0xee};
 		String result = BaseUtils.getChunkedBase16(test);
-		assertEquals("Input did not match output", "AABB CCDD EE\n", result);
+		assertEquals("Input did not match output", "AA BB CC DD EE\n", result);
 	}
 	
 	public void testChunkingTwo() {
 		byte[] test = { (byte)0x11, (byte)0x22, (byte)0x33, (byte)0x44, (byte)0x55, (byte)0x66, (byte)0x77, (byte)0x88};
 		String result = BaseUtils.getChunkedBase16(test);
-		assertEquals("Input did not match output", "1122 3344 5566 7788\n", result);
+		assertEquals("Input did not match output", "11 22 33 44 55 66 77 88\n", result);
 	}
 }
