@@ -18,6 +18,9 @@
 
 package org.sector67.otp.test;
 
+import org.sector67.otp.encoding.EncodingException;
+import org.sector67.otp.encoding.SimpleBase16Encoder;
+import org.sector67.otp.encoding.TextEncoder;
 import org.sector67.otp.key.FileKeyStore;
 import org.sector67.otp.utils.BaseUtils;
 
@@ -40,15 +43,19 @@ public class EncodingAndChunkingTests extends TestCase {
 	}
 
 	
-	public void testChunkingOne() {
+	public void testChunkingOne() throws EncodingException {
 		byte[] test = { (byte)0xaa, (byte)0xbb, (byte)0xcc, (byte)0xdd, (byte)0xee};
-		String result = BaseUtils.getChunkedBase16(test);
+		SimpleBase16Encoder encoder = new SimpleBase16Encoder();
+		encoder.setMinorChunkSeparator(" ");
+		String result = encoder.encode(test);
 		assertEquals("Input did not match output", "AA BB CC DD EE\n", result);
 	}
 	
-	public void testChunkingTwo() {
+	public void testChunkingTwo() throws EncodingException {
 		byte[] test = { (byte)0x11, (byte)0x22, (byte)0x33, (byte)0x44, (byte)0x55, (byte)0x66, (byte)0x77, (byte)0x88};
-		String result = BaseUtils.getChunkedBase16(test);
+		SimpleBase16Encoder encoder = new SimpleBase16Encoder();
+		encoder.setMinorChunkSeparator(" ");
+		String result = encoder.encode(test);
 		assertEquals("Input did not match output", "11 22 33 44 55 66 77 88\n", result);
 	}
 }

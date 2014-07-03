@@ -24,6 +24,7 @@ import java.nio.file.attribute.FileAttribute;
 
 import org.sector67.otp.EncryptionException;
 import org.sector67.otp.cipher.OneTimePadCipher;
+import org.sector67.otp.encoding.SimpleBase16Encoder;
 import org.sector67.otp.key.FileKeyStore;
 import org.sector67.otp.utils.BaseUtils;
 
@@ -78,8 +79,10 @@ public class FileKeyStoreTests extends TestCase {
 		String original = "This is a somewhat longer test that includes hello, World";
 		OneTimePadCipher cipher = new OneTimePadCipher(store);
 		byte[] encrypted = cipher.encrypt("encrypt-key", original);
-		String chunked = BaseUtils.getChunkedBase16(encrypted);
-		byte[] decoded = BaseUtils.base16ToBytes(chunked);
+		SimpleBase16Encoder encoder = new SimpleBase16Encoder();
+		encoder.setMinorChunkSeparator(" ");
+		String chunked = encoder.encode(encrypted);
+		byte[] decoded = encoder.decode(chunked);
 		String decrypted = cipher.decrypt("decrypt-key", decoded);
 		assertEquals("The original test did not match the decrypted text",
 				original, decrypted);

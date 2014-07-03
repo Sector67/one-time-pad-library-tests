@@ -22,8 +22,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileAttribute;
 
+import org.apache.commons.codec.EncoderException;
 import org.sector67.otp.EncryptionException;
 import org.sector67.otp.cipher.OneTimePadCipher;
+import org.sector67.otp.encoding.EncodingException;
+import org.sector67.otp.encoding.ErrorCorrectingBase16Encoder;
 import org.sector67.otp.key.FileKeyStore;
 import org.sector67.otp.utils.BaseUtils;
 import org.sector67.otp.utils.ErrorCorrectingUtils;
@@ -59,22 +62,23 @@ public class ECCTest extends TestCase {
 		try {
 			String original = "I am testing ECC by losing some data on purpose";
 			OneTimePadCipher cipher = new OneTimePadCipher(store);
+			ErrorCorrectingBase16Encoder encoder = new ErrorCorrectingBase16Encoder();
+
 			byte[] encrypted = cipher.encrypt("encrypt-key", original);
-			// encode including ECC
-			byte[] ecc = ErrorCorrectingUtils.encode(encrypted);
-			//flip some bits
-			ecc[2] = 0x0;
-			ecc[3] = 0x0;
-			ecc[4] = 0x0;
-			ecc[5] = 0x0;
-			String chunked = BaseUtils.getChunkedBase16(ecc);
-			byte[] decoded = BaseUtils.base16ToBytes(chunked);
+
+			
+			String chunked = encoder.encode(encrypted);
+			
+			//flip some bits to introduce errors
+			chunked = chunked.replaceFirst("A", "0");
+			chunked = chunked.replaceFirst("A", "0");
+
+			byte[] decoded = encoder.decode(chunked);
 			// decode using ECC
-			byte[] errorCorrected = ErrorCorrectingUtils.decode(decoded);
-			String decrypted = cipher.decrypt("decrypt-key", errorCorrected);
-			assertTrue("The original test did not match the decrypted text",
-					original.equals(decrypted));
-		} catch (ReedSolomonException e) {
+			//byte[] errorCorrected = ErrorCorrectingUtils.decode(decoded);
+			String decrypted = cipher.decrypt("decrypt-key", decoded);
+			assertEquals("The original test did not match the decrypted text", original, decrypted);
+		} catch (EncodingException e) {
 			fail("Exception caught:" + e);
 		}
 	}
@@ -88,21 +92,20 @@ public class ECCTest extends TestCase {
 			OneTimePadCipher cipher = new OneTimePadCipher(store);
 			byte[] encrypted = cipher.encrypt("encrypt-key", original);
 			// encode including ECC
-			byte[] ecc = ErrorCorrectingUtils.encode(encrypted);
+			ErrorCorrectingBase16Encoder encoder = new ErrorCorrectingBase16Encoder();
+
+			String ecc = encoder.encode(encrypted);
 			//flip some bits
-			ecc[1] = 0x0;
-			ecc[2] = 0x0;
-			ecc[3] = 0x0;
-			ecc[4] = 0x0;
-			ecc[5] = 0x0;
-			String chunked = BaseUtils.getChunkedBase16(ecc);
-			byte[] decoded = BaseUtils.base16ToBytes(chunked);
-			// decode using ECC
-			byte[] errorCorrected = ErrorCorrectingUtils.decode(decoded);
+			ecc = ecc.replaceAll("A", "0");
+			ecc = ecc.replaceAll("B", "0");
+			ecc = ecc.replaceAll("C", "0");
+			ecc = ecc.replaceAll("D", "0");
+
+			byte[] decoded = encoder.decode(ecc);
 			@SuppressWarnings("unused")
-			String decrypted = cipher.decrypt("decrypt-key", errorCorrected);
+			String decrypted = cipher.decrypt("decrypt-key", decoded);
 			fail("Too much data was lost, this point should not be reached");
-		} catch (ReedSolomonException e) {
+		} catch (EncodingException e) {
 			//expected
 		}
 	}
