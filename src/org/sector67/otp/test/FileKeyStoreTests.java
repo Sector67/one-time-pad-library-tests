@@ -42,6 +42,7 @@ public class FileKeyStoreTests extends TestCase {
 		super.setUp();
 		Path tempDir = Files.createTempDirectory("file-test", new FileAttribute[0]);
 		FileKeyStore store = new FileKeyStore(tempDir.toString());
+		store.init();
 		store.generateKey("encrypt-key", 1000);
 		store.copyKey("encrypt-key", "decrypt-key");
 		this.store = store;
