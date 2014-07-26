@@ -22,18 +22,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileAttribute;
 
-import org.apache.commons.codec.EncoderException;
+import junit.framework.TestCase;
+
 import org.sector67.otp.EncryptionException;
 import org.sector67.otp.cipher.OneTimePadCipher;
 import org.sector67.otp.encoding.EncodingException;
 import org.sector67.otp.encoding.ErrorCorrectingBase16Encoder;
 import org.sector67.otp.key.FileKeyStore;
-import org.sector67.otp.utils.BaseUtils;
-import org.sector67.otp.utils.ErrorCorrectingUtils;
-
-import junit.framework.TestCase;
-
-import com.google.zxing.common.reedsolomon.ReedSolomonException;
 
 /**
  * Error correction code test suite

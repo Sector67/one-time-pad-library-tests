@@ -18,13 +18,11 @@
 
 package org.sector67.otp.test;
 
+import junit.framework.TestCase;
+
 import org.sector67.otp.encoding.EncodingException;
 import org.sector67.otp.encoding.SimpleBase16Encoder;
-import org.sector67.otp.encoding.TextEncoder;
 import org.sector67.otp.key.FileKeyStore;
-import org.sector67.otp.utils.BaseUtils;
-
-import junit.framework.TestCase;
 
 /**
  * Encoding and chunking test suite
