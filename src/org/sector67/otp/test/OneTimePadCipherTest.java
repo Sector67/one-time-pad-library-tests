@@ -62,7 +62,7 @@ public class OneTimePadCipherTest extends TestCase {
 		s.addKey("decrypt-key", keybytes, 0);
 		OneTimePadCipher cipher = new OneTimePadCipher(s);
 		byte[] encrypted = cipher.encrypt("encrypt-key", original);
-		String decrypted = cipher.decrypt("decrypt-key", encrypted);
+		String decrypted = cipher.decrypt("decrypt-key", 0, encrypted);
 		assertEquals("The original test did not match the decrypted text",
 				original, decrypted);
 	}
@@ -119,7 +119,7 @@ public class OneTimePadCipherTest extends TestCase {
 		byte[] encrypted = cipher.encrypt("encrypt-key",  original);
 		String b64encoded = BaseUtils.bytesToBase64(encrypted);
 		byte[] b64decoded = BaseUtils.base64ToBytes(b64encoded);
-		String decrypted = cipher.decrypt("decrypt-key", b64decoded);
+		String decrypted = cipher.decrypt("decrypt-key", 0, b64decoded);
 		assertEquals("The original test did not match the decrypted text",
 				original, decrypted);
 

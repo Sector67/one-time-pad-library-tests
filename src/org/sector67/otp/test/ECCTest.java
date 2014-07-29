@@ -72,7 +72,7 @@ public class ECCTest extends TestCase {
 			byte[] decoded = encoder.decode(chunked);
 			// decode using ECC
 			//byte[] errorCorrected = ErrorCorrectingUtils.decode(decoded);
-			String decrypted = cipher.decrypt("decrypt-key", decoded);
+			String decrypted = cipher.decrypt("decrypt-key", 0, decoded);
 			assertEquals("The original test did not match the decrypted text", original, decrypted);
 		} catch (EncodingException e) {
 			fail("Exception caught:" + e);
@@ -99,7 +99,7 @@ public class ECCTest extends TestCase {
 
 			byte[] decoded = encoder.decode(ecc);
 			@SuppressWarnings("unused")
-			String decrypted = cipher.decrypt("decrypt-key", decoded);
+			String decrypted = cipher.decrypt("decrypt-key", 0, decoded);
 			fail("Too much data was lost, this point should not be reached");
 		} catch (EncodingException e) {
 			//expected

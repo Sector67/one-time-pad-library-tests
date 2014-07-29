@@ -58,7 +58,7 @@ public class OneTimePadCipherFileTest extends TestCase {
 		String original = "Hello, World";
 		OneTimePadCipher cipher = new OneTimePadCipher(store);
 		byte[] encrypted = cipher.encrypt("encrypt-key", original);
-		String decrypted = cipher.decrypt("decrypt-key", encrypted);
+		String decrypted = cipher.decrypt("decrypt-key", 0, encrypted);
 		assertTrue("The original text did not match the encrypted text", original.equals(decrypted));
 	}
 	/*
@@ -68,10 +68,10 @@ public class OneTimePadCipherFileTest extends TestCase {
 			String original = "I am going to clear the key after encrypting and decrypting";
 			OneTimePadCipher cipher = new OneTimePadCipher(store);
 			byte[] encrypted = cipher.encrypt("encrypt-key", original);
-			String decrypted = cipher.decrypt("decrypt-key", encrypted);
+			String decrypted = cipher.decrypt("decrypt-key", 0, encrypted);
 			assertEquals("The original text did not match the decrypted text", original, decrypted);
 			//re-decrypt should not work
-			decrypted = cipher.decrypt("decrypt-key", encrypted);
+			decrypted = cipher.decrypt("decrypt-key", 0, encrypted);
 			assertFalse("The original should now not match the decrypted text", original.equals(decrypted));
 			//re-encrypt should give a different value as well
 			byte[] encrypted2 = cipher.encrypt("encrypt-key", original);

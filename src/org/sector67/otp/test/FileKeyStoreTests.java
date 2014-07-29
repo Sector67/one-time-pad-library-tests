@@ -60,7 +60,7 @@ public class FileKeyStoreTests extends TestCase {
 		byte[] encrypted = cipher.encrypt("encrypt-key", original);
 		String chunked = BaseUtils.getChunkedBase64(encrypted);
 		byte[] decoded = BaseUtils.base64ToBytes(chunked);
-		String decrypted = cipher.decrypt("decrypt-key", decoded);
+		String decrypted = cipher.decrypt("decrypt-key", 0, decoded);
 		assertEquals("The original test did not match the decrypted text",
 				original, decrypted);
 	}
@@ -71,7 +71,7 @@ public class FileKeyStoreTests extends TestCase {
 		byte[] encrypted = cipher.encrypt("encrypt-key", original);
 		String chunked = BaseUtils.getChunkedBase32(encrypted);
 		byte[] decoded = BaseUtils.base32ToBytes(chunked);
-		String decrypted = cipher.decrypt("decrypt-key", decoded);
+		String decrypted = cipher.decrypt("decrypt-key", 0, decoded);
 		assertEquals("The original test did not match the decrypted text",
 				original, decrypted);
 	}
@@ -84,7 +84,7 @@ public class FileKeyStoreTests extends TestCase {
 		encoder.setMinorChunkSeparator(" ");
 		String chunked = encoder.encode(encrypted);
 		byte[] decoded = encoder.decode(chunked);
-		String decrypted = cipher.decrypt("decrypt-key", decoded);
+		String decrypted = cipher.decrypt("decrypt-key", 0, decoded);
 		assertEquals("The original test did not match the decrypted text",
 				original, decrypted);
 	}
