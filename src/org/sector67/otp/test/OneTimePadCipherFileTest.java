@@ -69,6 +69,7 @@ public class OneTimePadCipherFileTest extends TestCase {
 			OneTimePadCipher cipher = new OneTimePadCipher(store);
 			byte[] encrypted = cipher.encrypt("encrypt-key", original);
 			String decrypted = cipher.decrypt("decrypt-key", 0, encrypted);
+			store.eraseKeyBytes("decrypt-key", 0, encrypted.length);
 			assertEquals("The original text did not match the decrypted text", original, decrypted);
 			//re-decrypt should not work
 			decrypted = cipher.decrypt("decrypt-key", 0, encrypted);
